@@ -1,5 +1,5 @@
-import { randomUUID } from "node:crypto";
-import { cookies } from "next/headers";
+const randomUUID = () => crypto.randomUUID();
+import { cookies } from "@/lib/local-session";
 import { and, desc, eq, sql } from "drizzle-orm";
 import { db } from "@/db";
 import {
@@ -141,12 +141,14 @@ export async function syncPlayer(p: Player): Promise<Player> {
   let energy = Math.min(max, p.energy + regen);
   let streakDays = p.streakDays;
   let streakShields = p.streakShields;
+  let lastDailyClaimAt = p.lastDailyClaimAt;
 
   // streak death: no claim for > 36h burns the streak (loss aversion engine)
   const last = p.lastDailyClaimAt ? new Date(p.lastDailyClaimAt).getTime() : 0;
   if (last && now - last > 36 * 3600_000) {
     if (streakShields > 0) {
       streakShields -= 1;
+      lastDailyClaimAt = new Date(now - 24 * 3600_000);
     } else if (streakDays > 0) {
       streakDays = 0;
     }
@@ -175,6 +177,7 @@ export async function syncPlayer(p: Player): Promise<Player> {
       lastSeenAt: new Date(),
       streakDays,
       streakShields,
+      lastDailyClaimAt,
       offerKey: offerExpired ? null : p.offerKey,
       offerExpiresAt: offerExpired ? null : p.offerExpiresAt,
     })

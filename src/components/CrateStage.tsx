@@ -215,7 +215,7 @@ export function RevealOverlay({
 
   const spinItems = useMemo(
     () =>
-      Array.from({ length: 24 }, () => ITEMS[Math.floor(Math.random() * ITEMS.length)]),
+      Array.from({ length: 24 }, (_, index) => ITEMS[(index * 17 + 7) % ITEMS.length]),
     [],
   );
 

@@ -1,4 +1,6 @@
 "use client";
+import { localFetch } from "@/lib/local-fetch";
+
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import CrateStage, { RevealOverlay } from "./CrateStage";
@@ -14,7 +16,7 @@ import {
 } from "./Panels";
 import { Chip, Countdown, Modal, Pill, fmt, money } from "./ui";
 import { isMuted, setMuted, sfx } from "@/lib/game/audio";
-import { RARITY_META } from "@/lib/game/config";
+import { RARITY_META, ITEM_MAP } from "@/lib/game/config";
 import type { GameState, OpenResult } from "@/lib/game/types";
 
 type Tab = "crates" | "shop" | "collection" | "pass" | "receipt";
@@ -28,7 +30,7 @@ const TABS: Array<{ key: Tab; label: string; icon: string }> = [
 ];
 
 async function post<T>(url: string, body: unknown): Promise<T> {
-  const res = await fetch(url, {
+  const res = await localFetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
@@ -99,7 +101,7 @@ export default function Game() {
     let alive = true;
     const load = async () => {
       try {
-        const res = await fetch("/api/state", { cache: "no-store" });
+        const res = await localFetch("/api/state", { cache: "no-store" });
         const data = (await res.json()) as ApiResponse;
         if (alive && data.state) setState(data.state);
       } catch {
@@ -222,7 +224,7 @@ export default function Game() {
       .slice(0, 10)
       .map(
         (f) =>
-          `🔥 ${f.name} pulled ${RARITY_META[f.rarity].label} ${f.name} ${f.emoji}`,
+          `🔥 ${f.name} pulled ${RARITY_META[f.rarity].label} ${ITEM_MAP[f.itemKey]?.name ?? "an item"} ${f.emoji}`,
       );
     return lines.length ? lines : ["Welcome to CRATEFALL"];
   }, [state]);

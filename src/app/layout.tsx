@@ -1,3 +1,4 @@
+import LocalApp from "@/components/LocalApp";
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import "./globals.css";
@@ -18,7 +19,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <body className="cf-bg min-h-screen text-white antialiased selection:bg-fuchsia-500/40">
-        {children}
+        <LocalApp>{children}</LocalApp>
       </body>
     </html>
   );

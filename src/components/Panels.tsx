@@ -6,6 +6,7 @@ import {
   HOOK_COLORS,
   HOOK_META,
   ITEMS,
+  ITEM_MAP,
   PASS_TIERS,
   PASS_UNLOCK_GEMS,
   PASS_XP_PER_TIER,
@@ -619,7 +620,7 @@ export function LiveFeed({ feed }: { feed: GameState["feed"] }) {
                     {f.isYou ? "YOU" : f.name}
                   </span>{" "}
                   pulled{" "}
-                  <span style={{ color: meta.color }}>{f.name}</span>
+                  <span style={{ color: meta.color }}>{ITEM_MAP[f.itemKey]?.name ?? "an item"}</span>
                 </div>
                 <div className="text-[9px] uppercase tracking-wider text-white/30">
                   {meta.label} · {ago(f.msAgo)}

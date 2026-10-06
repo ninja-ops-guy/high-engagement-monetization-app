@@ -1,31 +1,32 @@
 {
-  "name": "nextjs-postgresql-template",
+  "name": "high-engagement-monetization-app",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "dev": "node scripts/prepare.mjs && next dev --webpack",
+    "build": "node scripts/prepare.mjs && next build --webpack && node scripts/postbuild.mjs",
+    "start": "node scripts/serve.mjs",
     "lint": "eslint .",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "db:generate": "drizzle-kit generate --config=drizzle.config.json",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
-    "dotenv": "17.3.1",
+    "@electric-sql/pglite": "0.5.8",
     "drizzle-orm": "0.45.2",
-    "next": "16.2.6",
-    "pg": "8.20.0",
+    "next": "16.3.8",
     "react": "19.2.6",
     "react-dom": "19.2.6"
   },
   "devDependencies": {
+    "@playwright/test": "1.58.2",
     "@tailwindcss/postcss": "4.1.17",
     "@types/node": "22.19.15",
-    "@types/pg": "8.18.0",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "drizzle-kit": "0.31.10",
     "eslint": "9.39.4",
-    "eslint-config-next": "16.2.6",
-    "postcss": "8.5.8",
+    "eslint-config-next": "16.3.8",
+    "postcss": "8.5.29",
     "tailwindcss": "4.1.17",
     "typescript": "5.9.3"
   }

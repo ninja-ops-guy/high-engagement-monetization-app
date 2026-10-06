@@ -135,18 +135,20 @@ export function Modal({
 export function Confetti({ count = 70 }: { count?: number }) {
   const bits = useMemo(
     () =>
-      Array.from({ length: count }, () => {
-        const angle = Math.random() * Math.PI * 2;
-        const dist = 120 + Math.random() * 380;
+      Array.from({ length: count }, (_, index) => {
+        let seed = index + 1;
+        const random = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+        const angle = random() * Math.PI * 2;
+        const dist = 120 + random() * 380;
         return {
           dx: `${Math.cos(angle) * dist}px`,
           dy: `${Math.sin(angle) * dist + 260}px`,
-          rot: `${Math.random() * 1080 - 540}deg`,
+          rot: `${random() * 1080 - 540}deg`,
           color: ["#ff4d6d", "#ffb02e", "#b06bff", "#3ea6ff", "#6ef2c0", "#ffffff"][
-            Math.floor(Math.random() * 6)
+            Math.floor(random() * 6)
           ],
-          delay: `${Math.random() * 0.25}s`,
-          scale: 0.6 + Math.random() * 0.9,
+          delay: `${random() * 0.25}s`,
+          scale: 0.6 + random() * 0.9,
         };
       }),
     [count],
@@ -185,10 +187,9 @@ export function Countdown({
   compact?: boolean;
 }) {
   const [ms, setMs] = useState(msLeft);
-  const startRef = useRef({ left: msLeft, at: Date.now() });
+  const startRef = useRef({ left: msLeft, at: 0 });
   useEffect(() => {
     startRef.current = { left: msLeft, at: Date.now() };
-    setMs(msLeft);
   }, [msLeft]);
 
   useEffect(() => {
