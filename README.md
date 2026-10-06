@@ -46,3 +46,7 @@ The original PostgreSQL schema and domain logic are reused with PGlite in Indexe
 The framework was updated to Next.js 16.3.8 after dependency review. Windows static-export RSC filenames are normalized after building for parity with the Linux Pages build.
 
 References: [GitHub Pages workflows](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages), [Next.js static exports](https://nextjs.org/docs/app/guides/static-exports), [PGlite browser persistence](https://pglite.dev/docs/filesystems).
+
+## Dependency review
+
+Runtime dependency audit: no known advisories at publication. The migration tool's old esbuild dependency is overridden to patched releases (0.25.12 or newer) and verified with schema generation. A development-only braces advisory remains in the Next.js linter's dependency chain: [GHSA-vfj7-8cjw-p6xm](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm). No upstream patched version is available. It affects processing attacker-supplied nested glob patterns; the linter uses repository-controlled patterns and is not shipped in the Pages app.
